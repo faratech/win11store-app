@@ -49,10 +49,10 @@ const App: React.FC = () => {
     pro: {
       name: "Microsoft Windows 11 Pro OEM",
       fullName: "Microsoft System Builder | Windows 11 Pro | OEM License",
-      price: "$159.99",
+      price: "$146.18",
       originalPrice: "$199.99",
-      discount: "20% OFF",
-      savings: "$40",
+      discount: "27% OFF",
+      savings: "$53.81",
       format: "DVD FORMAT - Physical Media Included",
       mainImage: "/js/Win11Store/images/win11-pro-1.jpg",
       affiliateUrl: "https://amzn.to/46HiIDU",
@@ -339,7 +339,7 @@ const App: React.FC = () => {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-5 h-5 ${i < currentProduct.rating ? 'text-yellow-300 fill-yellow-300' : 'text-yellow-300 fill-none'}`}
+                        className={`w-5 h-5 ${i < Math.floor(currentProduct.rating) ? 'text-yellow-300 fill-yellow-300' : 'text-gray-400'}`}
                       />
                     ))}
                     <span className="text-white ml-2">({currentProduct.reviews.toLocaleString()} reviews)</span>
@@ -612,22 +612,22 @@ const App: React.FC = () => {
 
 
         {/* Final CTA */}
-        <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white">
+        <div className="mt-16 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 text-center text-white border border-gray-700">
           <h2 className="text-3xl font-bold mb-4">Ready to Upgrade to Windows 11?</h2>
-          <p className="text-xl mb-2 opacity-90">Get Your Genuine OEM License Today</p>
-          <p className="text-sm mb-6 opacity-80">Join millions who've upgraded to the future of Windows</p>
+          <p className="text-xl mb-2 text-gray-200">Get Your Genuine OEM License Today</p>
+          <p className="text-sm mb-6 text-gray-400">Join millions who've upgraded to the future of Windows</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
               href={currentProduct.affiliateUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white hover:bg-gray-100 text-blue-600 font-bold py-4 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center"
+              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center"
             >
               <Package className="w-5 h-5 mr-2" />
               Order {activeTab === 'm365' ? 'Microsoft 365' : 'Windows 11 OEM'} Now
               <ChevronRight className="w-5 h-5 ml-2" />
             </a>
-            <div className="text-sm">
+            <div className="text-sm text-gray-300">
               <Lock className="inline w-4 h-4 mr-1" />
               Secure Amazon Checkout • Fast Shipping
             </div>
