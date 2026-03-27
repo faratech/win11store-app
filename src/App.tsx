@@ -23,7 +23,7 @@ const App: React.FC = () => {
       savings: "$20",
       format: "DVD FORMAT - Physical Media Included",
       mainImage: "/js/Win11Store/images/win11-home-1.jpg",
-      affiliateUrl: "https://amzn.to/46HiIDU",
+      affiliateUrl: "https://www.amazon.com/dp/B09MYJ1R6L?tag=windowsfor081-20&linkCode=sl1&language=en_US",
       features: [
         "STREAMLINED & INTUITIVE UI - Centered Start menu and effortless navigation",
         "SNAP LAYOUTS - Organize windows with pre-configured layouts that adapt to your screen",
@@ -55,7 +55,7 @@ const App: React.FC = () => {
       savings: "$53.81",
       format: "DVD FORMAT - Physical Media Included",
       mainImage: "/js/Win11Store/images/win11-pro-1.jpg",
-      affiliateUrl: "https://amzn.to/46HiIDU",
+      affiliateUrl: "https://www.amazon.com/dp/B09MYBD79G?tag=windowsfor081-20&linkCode=sl1&language=en_US",
       features: [
         "Everything in Windows 11 Home, PLUS:",
         "BITLOCKER ENCRYPTION - Full device encryption for data protection",
@@ -88,7 +88,7 @@ const App: React.FC = () => {
       savings: "",
       format: "DIGITAL DOWNLOAD - Instant Delivery",
       mainImage: "/js/Win11Store/images/m365-1.jpg",
-      affiliateUrl: "https://amzn.to/4nVAeeQ",
+      affiliateUrl: "https://www.amazon.com/dp/B07F3TQ6DQ?tag=windowsfor081-20&linkCode=sl1&language=en_US",
       features: [
         "PREMIUM OFFICE APPS - Word, Excel, PowerPoint, Outlook, OneNote",
         "1TB ONEDRIVE CLOUD STORAGE - Secure cloud backup and file sync",
