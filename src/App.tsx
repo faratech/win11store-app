@@ -491,12 +491,15 @@ const App: React.FC = () => {
               <a
                 href={currentProduct.affiliateUrl}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="sponsored noopener noreferrer"
                 className="block w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-4 px-8 rounded-xl text-center text-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               >
                 <ShoppingCart className="inline w-5 h-5 mr-2" />
                 Buy Now on Amazon{currentProduct.savings ? ` - Save ${currentProduct.savings}` : ''}
               </a>
+              <p className="text-center text-xs leading-5 text-gray-500 dark:text-gray-400">
+                Paid link — WindowsForum may earn a commission if you buy through this link.
+              </p>
 
               <div className="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center">
@@ -620,7 +623,7 @@ const App: React.FC = () => {
             <a
               href={currentProduct.affiliateUrl}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="sponsored noopener noreferrer"
               className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center"
             >
               <Package className="w-5 h-5 mr-2" />
@@ -632,6 +635,9 @@ const App: React.FC = () => {
               Secure Amazon Checkout • Fast Shipping
             </div>
           </div>
+          <p className="mt-3 text-xs leading-5 text-gray-400">
+            Paid link — WindowsForum may earn a commission if you buy through this link.
+          </p>
         </div>
       </div>
 
@@ -639,7 +645,7 @@ const App: React.FC = () => {
       <footer className="bg-gray-900 text-gray-300 py-8 px-4 mt-16">
         <div className="container mx-auto text-center">
           <p className="text-sm text-gray-500">
-            WindowsForum is a participant in the Amazon Services LLC Associates Program.
+            As an Amazon Associate I earn from qualifying purchases.
           </p>
           <p className="text-sm text-gray-500 mt-1">
             Windows is a registered trademark of Microsoft Corporation.
