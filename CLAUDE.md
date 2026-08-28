@@ -38,7 +38,7 @@ No PA-API is used, so the store must not display prices, discounts, star ratings
 4. Purge: `./purge-store-cache.sh` (called by both deploy scripts). **Three layers can hold a stale store page** — learned the hard way on 2026-08-27:
    - XenForo's Redis guest page cache (DB 1, `xf:page_{sha1(fullUri)}_{len}_*`, ~600s): `pagecache.php` replays it into httpjet, so purging httpjet alone lets the stale copy bounce straight back. The script deletes these keys by sha1-URI prefix.
    - httpjet LSCache page entries + **capsule snapshots** (`--xf-capsule`, 3600s stale window): store pages carry `X-LiteSpeed-Tag: public, ST` and `X-WF-Capsule-Tags: public, ST` (the `store` case in SessionValidator's `CacheOptimizer::applyPathBasedHeaders()`), so one `tag=ST` purge evicts both. A capsule snapshot stored *before* the ST case existed needed `tag=xf_capsule` once — never again unless CacheOptimizer's store case is removed.
-   - Cloudflare edge (`s-maxage` 1800) ages out on its own; per-URL CF purge can't evict guest HTML here.
+   - Cloudflare edge: the script also runs a per-URL API purge (global key from `/web/.env`) covering catalog.json, the sitemap, and every catalog image — **effective for static assets** (image filenames are stable, so replaced photos would otherwise serve stale from the edge). The page URLs are included best-effort only: per-URL purge verifiably does NOT evict this zone's guest HTML (retested 2026-08-28, plain + CF-Device-Type variants; API says success, entry survives) — guest HTML ages out via `s-maxage` 1800.
    - **CacheOptimizer.php is in the opcache preload set** — after editing it, `systemctl restart httpjet-lsphp` (socket-activated, graceful) or the change never takes effect.
 
 ### XenForo add-on (`/web/public_html/src/addons/Win11Store/`)
@@ -53,6 +53,7 @@ No PA-API is used, so the store must not display prices, discounts, star ratings
 ### Theme & design
 
 - Dark mode mirrors XenForo: `src/contexts/ThemeContext.tsx` (ported from windowsbuilds_app) observes `<html>` attrs + `xf_style_variation` cookie and writes a `.dark` class; Tailwind 4 dark variant is declared in `src/index.css` (`@custom-variant dark`). There is no tailwind.config.js — TW4 CSS-first.
+- **Never reintroduce `@import "tailwindcss"` whole**: this stylesheet loads globally on the XF page, and preflight's `* { margin: 0 }` squeezed the forum navbar/sidebar (bug, 2026-08-28). `index.css` imports theme+utilities only and re-applies preflight scoped to `#win11-store-root` + `.store-portal` — any new portal wrapper must join that scope list.
 - Design tokens (`--wfs-*` in `src/index.css`) mirror the wf5 canonical layer (`public_html/src/styles/wf5/templates/public/extra.less`): Fluent, Segoe UI Variable, radii 4/6/8, accent `#0f6cbd`/dark `#7cb4f5`. Category rail colors: `--wfs-cat-{slug}` (fallback = accent, so new categories render without code changes).
 - Modal/lightbox (`src/components/ui/Modal.tsx`) is the windowsbuilds a11y port (portal, focus trap, Escape, dual `<html>`+`<body>` scroll lock — jsdom would bless a body-only lock that does nothing on the real page).
 

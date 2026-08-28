@@ -1,7 +1,60 @@
-@import "tailwindcss";
+/*
+ * Granular Tailwind imports, deliberately WITHOUT preflight: this stylesheet
+ * loads globally on a XenForo page, and preflight's universal reset
+ * (`* { margin: 0; padding: 0 }`) squeezed the forum's own navbar — icons lost
+ * their spacing site-chrome-wide (reported 2026-08-28, same bug as the
+ * windowsbuilds app). The equivalent reset is re-applied below, scoped to the
+ * app root and the modal portal only.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 @source "./index.html";
 @source "./src/**/*.{js,ts,jsx,tsx}";
+
+@layer base {
+  /* Preflight, scoped. :where() keeps specificity at zero so utilities and
+     the token rules below still win. `border: 0 solid` is load-bearing —
+     Tailwind's border-width utilities assume it. */
+  :where(#win11-store-root, .store-portal),
+  :where(#win11-store-root, .store-portal) *,
+  :where(#win11-store-root, .store-portal) *::before,
+  :where(#win11-store-root, .store-portal) *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  :where(#win11-store-root, .store-portal) :is(h1, h2, h3, h4, h5, h6) {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  :where(#win11-store-root, .store-portal) :is(ul, ol) {
+    list-style: none;
+  }
+  :where(#win11-store-root, .store-portal) a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+  :where(#win11-store-root, .store-portal) :is(img, svg, video) {
+    display: block;
+    vertical-align: middle;
+  }
+  :where(#win11-store-root, .store-portal) :is(img, video) {
+    max-width: 100%;
+    height: auto;
+  }
+  :where(#win11-store-root, .store-portal) :is(button, input, select, textarea) {
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+  }
+  :where(#win11-store-root, .store-portal) button {
+    cursor: pointer;
+    appearance: none;
+  }
+}
 
 /* XenForo controls dark mode; ThemeContext mirrors it as a `.dark` class on <html>. */
 @custom-variant dark (&:where(.dark, .dark *));

@@ -32,4 +32,32 @@ done
 
 curl -s 'http://127.0.0.1/lscache_purge.php?tag=ST' -H 'Host: windowsforum.com'
 echo ""
-echo "✅ Store caches purged (${#urls[@]} URLs + tag=ST)"
+
+# Cloudflare per-URL purge (global key from /web/.env). Effective for the
+# static assets — image filenames are stable, so a replaced photo leaves stale
+# bytes at the edge without this. The page URLs are included best-effort only:
+# per-URL purge verifiably does NOT evict this zone's guest HTML (retested
+# 2026-08-28 incl. CF-Device-Type variants) — those age out via s-maxage.
+python3 - <<'PY' || echo "⚠ Cloudflare purge failed (origin layers are purged regardless)"
+import json, os, requests
+from dotenv import load_dotenv
+load_dotenv("/web/.env")
+zone = os.environ["CLOUDFLARE_ZONE_ID"]
+catalog = json.load(open(os.environ.get("CATALOG", "/web/public_html/js/Win11Store/catalog.json")))
+urls = ["https://windowsforum.com/store/"]
+urls += [f"https://windowsforum.com/store/{c['slug']}/" for c in catalog["categories"]]
+urls += ["https://windowsforum.com/js/Win11Store/catalog.json",
+         "https://windowsforum.com/store-sitemap.xml"]
+urls += sorted({f"https://windowsforum.com/js/Win11Store/{img['src']}"
+                for p in catalog["products"] for img in p.get("images", [])})
+headers = {"X-Auth-Email": os.environ["CLOUDFLARE_EMAIL"],
+           "X-Auth-Key": os.environ["CLOUDFLARE_GLOBAL_TOKEN"]}
+for i in range(0, len(urls), 30):  # API cap: 30 files per request
+    r = requests.post(f"https://api.cloudflare.com/client/v4/zones/{zone}/purge_cache",
+                      headers=headers, json={"files": urls[i:i + 30]}, timeout=15)
+    r.raise_for_status()
+    assert r.json().get("success"), r.text
+print(f"   cloudflare: purged {len(urls)} URLs")
+PY
+
+echo "✅ Store caches purged (${#urls[@]} URLs + tag=ST + Cloudflare)"
