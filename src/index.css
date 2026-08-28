@@ -2,3 +2,107 @@
 
 @source "./index.html";
 @source "./src/**/*.{js,ts,jsx,tsx}";
+
+/* XenForo controls dark mode; ThemeContext mirrors it as a `.dark` class on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Store token layer — values mirror the wf5 canonical tokens in
+ * public_html/src/styles/wf5/templates/public/extra.less (Fluent, WCAG 2.2 AA
+ * annotated there). Bridged into Tailwind via @theme so utilities like
+ * bg-panel / text-ink / text-accent exist. Category identity colors are the
+ * one addition: each store category owns a restrained rail/chip color.
+ */
+@theme {
+  --font-ui: 'Segoe UI Variable Text', 'Segoe UI', 'Public Sans', system-ui, sans-serif;
+  --font-display: 'Segoe UI Variable Display', 'Segoe UI', 'Public Sans', system-ui, sans-serif;
+
+  --color-ink: var(--wfs-ink);
+  --color-ink2: var(--wfs-ink2);
+  --color-muted: var(--wfs-muted);
+  --color-panel: var(--wfs-panel);
+  --color-panel-alt: var(--wfs-panel-alt);
+  --color-solid: var(--wfs-solid);
+  --color-edge: var(--wfs-edge);
+  --color-accent: var(--wfs-accent);
+  --color-accent-hover: var(--wfs-accent-hover);
+  --color-accent-soft: var(--wfs-accent-soft);
+  --color-on-accent: var(--wfs-on-accent);
+
+  --color-cat-surface: var(--wfs-cat-surface);
+  --color-cat-xbox: var(--wfs-cat-xbox);
+  --color-cat-pc-upgrades: var(--wfs-cat-pc-upgrades);
+  --color-cat-accessories: var(--wfs-cat-accessories);
+  --color-cat-software: var(--wfs-cat-software);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --shadow-depth: 0 1.6px 3.6px rgba(0, 0, 0, 0.132), 0 0.3px 0.9px rgba(0, 0, 0, 0.11);
+  --shadow-depth-lg: 0 6.4px 14.4px rgba(0, 0, 0, 0.132), 0 1.2px 3.6px rgba(0, 0, 0, 0.108);
+}
+
+:root {
+  --wfs-ink: #101317;
+  --wfs-ink2: #3b424a;
+  --wfs-muted: #585f6a;
+  --wfs-panel: #ffffff;
+  --wfs-panel-alt: #f4f7fb;
+  --wfs-solid: #ffffff;
+  --wfs-edge: rgba(16, 19, 23, 0.12);
+  --wfs-accent: #0f6cbd;
+  --wfs-accent-hover: #115ea3;
+  --wfs-accent-soft: rgba(15, 108, 189, 0.11);
+  --wfs-on-accent: #ffffff;
+
+  --wfs-cat-surface: #0f6cbd;
+  --wfs-cat-xbox: #107c10;
+  --wfs-cat-pc-upgrades: #a94a17;
+  --wfs-cat-accessories: #6b3fb8;
+  --wfs-cat-software: #4f5b93;
+}
+
+.dark {
+  --wfs-ink: #eef0f4;
+  --wfs-ink2: #c3c9d2;
+  --wfs-muted: #9aa3b0;
+  --wfs-panel: #1e232d;
+  --wfs-panel-alt: #262c38;
+  --wfs-solid: #181c24;
+  --wfs-edge: rgba(238, 240, 244, 0.14);
+  --wfs-accent: #7cb4f5;
+  --wfs-accent-hover: #9cc6f8;
+  --wfs-accent-soft: rgba(124, 180, 245, 0.16);
+  --wfs-on-accent: #0a0d12;
+
+  --wfs-cat-surface: #7cb4f5;
+  --wfs-cat-xbox: #6ccb5f;
+  --wfs-cat-pc-upgrades: #e8956d;
+  --wfs-cat-accessories: #b79ae8;
+  --wfs-cat-software: #9aa8e0;
+}
+
+/* The modal portals to <body>, outside #win11-store-root — both need the base type. */
+#win11-store-root,
+.store-portal {
+  font-family: var(--font-ui);
+  color: var(--wfs-ink);
+}
+
+/* Card hover lift — the only motion on the page. */
+.store-card {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.store-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-depth-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .store-card,
+  .store-card:hover {
+    transition: none;
+    transform: none;
+  }
+}

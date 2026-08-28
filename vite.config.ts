@@ -10,6 +10,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: '',
+    // update-controller.sh resolves the entry chunk from dist/.vite/manifest.json
+    // instead of guessing with `ls -t`.
+    manifest: true,
     rollupOptions: {
       output: {
         entryFileNames: 'index-[hash].js',

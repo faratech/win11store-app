@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; font-family: "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Helvetica, sans-serif; }
+    a { color: #0f6cbd; text-decoration: none; } a:hover { color: #115ea3; }
+  </style>
+</helmet>
+<div style="width: 1440px; background: #eff5f6; color: #101317; font-size: 15px; line-height: 1.5">
+
+  <!-- Forum chrome -->
+  <div style="height: 60px; background: #0f6cbd; display: flex; align-items: center; justify-content: space-between; padding: 0 32px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="0" y="0" width="10" height="10" fill="#f25022"></rect><rect x="12" y="0" width="10" height="10" fill="#7fba00"></rect><rect x="0" y="12" width="10" height="10" fill="#00a4ef"></rect><rect x="12" y="12" width="10" height="10" fill="#ffb900"></rect></svg>
+      <div style="font-size: 17px; font-weight: 700; color: #ffffff; letter-spacing: 0.04em">WINDOWS <span style="font-weight: 300">FORUM</span></div>
+    </div>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+  </div>
+  <div style="height: 42px; background: rgba(255,255,255,0.85); display: flex; align-items: center; padding: 0 32px; font-size: 13px; color: #3b424a; gap: 8px">
+    <span>Forums</span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#585f6a" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg>
+    <span>Store</span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#585f6a" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg>
+    <span style="font-weight: 600; color: #101317">PC Upgrades</span>
+  </div>
+
+  <div style="max-width: 1280px; margin: 0 auto; padding: 28px 24px 0 24px">
+
+    <!-- Category nav -->
+    <div style="display: flex; gap: 8px">
+      <div style="padding: 8px 16px; border-radius: 6px; background: #ffffff; border: 1px solid rgba(16,19,23,0.12); color: #3b424a; font-size: 14px; font-weight: 600">All picks</div>
+      <div style="padding: 8px 16px; border-radius: 6px; background: #ffffff; border: 1px solid rgba(16,19,23,0.12); color: #3b424a; font-size: 14px; font-weight: 600">Surface</div>
+      <div style="padding: 8px 16px; border-radius: 6px; background: #ffffff; border: 1px solid rgba(16,19,23,0.12); color: #3b424a; font-size: 14px; font-weight: 600">Xbox</div>
+      <div style="padding: 8px 16px; border-radius: 6px; background: #a94a17; color: #ffffff; font-size: 14px; font-weight: 600">PC Upgrades</div>
+      <div style="padding: 8px 16px; border-radius: 6px; background: #ffffff; border: 1px solid rgba(16,19,23,0.12); color: #3b424a; font-size: 14px; font-weight: 600">Accessories</div>
+      <div style="padding: 8px 16px; border-radius: 6px; background: #ffffff; border: 1px solid rgba(16,19,23,0.12); color: #3b424a; font-size: 14px; font-weight: 600">Software</div>
+    </div>
+
+    <!-- Heading -->
+    <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 8px">
+      <div style="font-family: 'Segoe UI Variable Display', 'Segoe UI', sans-serif; font-size: 32px; font-weight: 650">PC Upgrades</div>
+      <div style="font-size: 15px; color: #585f6a; max-width: 720px">Drives, memory, and TPM modules that get an older PC over the Windows 11 bar — each one a part the forum actually recommends in threads.</div>
+      <div style="font-size: 12px; color: #585f6a">Paid links — WindowsForum may earn a commission if you buy through them.</div>
+    </div>
+
+    <!-- Windows 11 readiness advisor -->
+    <div style="margin-top: 20px; background: rgba(15,108,189,0.07); border: 1px solid rgba(15,108,189,0.25); border-radius: 8px; padding: 18px 22px; display: flex; gap: 24px; align-items: center">
+      <div style="flex: 0 0 260px; display: flex; flex-direction: column; gap: 4px">
+        <div style="font-size: 16px; font-weight: 650">Will your PC run Windows 11?</div>
+        <div style="font-size: 13px; color: #3b424a">Three checks decide it. Each one maps to a fix below.</div>
+      </div>
+      <div style="flex: 1 1 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+        <div style="background: #ffffff; border-radius: 6px; padding: 10px 14px; display: flex; gap: 10px; align-items: center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="1.8" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"></rect><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path></svg>
+          <div style="font-size: 13px"><span style="font-weight: 600">TPM 2.0</span> — firmware first, module if missing</div>
+        </div>
+        <div style="background: #ffffff; border-radius: 6px; padding: 10px 14px; display: flex; gap: 10px; align-items: center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 4v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V7z"></path></svg>
+          <div style="font-size: 13px"><span style="font-weight: 600">UEFI + Secure Boot</span> — flip it on, free</div>
+        </div>
+        <div style="background: #ffffff; border-radius: 6px; padding: 10px 14px; display: flex; gap: 10px; align-items: center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="1.8" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="1"></rect><path d="M7 8v8M11 8v8M15 8v8"></path></svg>
+          <div style="font-size: 13px"><span style="font-weight: 600">RAM &amp; storage</span> — 8GB + SSD is the real floor</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product grid -->
+    <div style="margin-top: 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+
+      <div style="background: #ffffff; border: 1px solid rgba(16,19,23,0.12); border-left: 3px solid #a94a17; border-radius: 8px; overflow: hidden; box-shadow: 0 1.6px 3.6px rgba(0,0,0,0.132), 0 0.3px 0.9px rgba(0,0,0,0.11); display: flex; flex-direction: column">
+        <div style="height: 150px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(16,19,23,0.08)">
+          <svg width="170" height="66" viewBox="0 0 170 66" aria-hidden="true"><rect x="10" y="20" width="150" height="26" rx="3" fill="#101317"></rect><rect x="20" y="27" width="40" height="12" rx="1" fill="#a94a17"></rect><rect x="132" y="25" width="12" height="16" fill="#3b424a"></rect></svg>
+        </div>
+        <div style="padding: 16px 18px 18px 18px; display: flex; flex-direction: column; gap: 7px; flex: 1 1 auto">
+          <div style="display: flex; gap: 6px"><span style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: #ffffff; background: #a94a17; border-radius: 4px; padding: 2px 8px">PC UPGRADES</span><span style="font-size: 11px; font-weight: 600; color: #0f6cbd; background: rgba(15,108,189,0.11); border-radius: 4px; padding: 2px 8px">Editor's pick</span></div>
+          <div style="font-size: 16px; font-weight: 650; line-height: 1.3">Samsung 990 PRO 2TB — PCIe 4.0 NVMe</div>
+          <div style="font-size: 13px; color: #585f6a">The forum's default answer to &quot;which SSD&quot;.</div>
+          <div style="display: flex; flex-direction: column; gap: 5px; font-size: 13px; color: #3b424a">
+            <div style="display: flex; gap: 8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span>Reads up to 7,450 MB/s</span></div>
+            <div style="display: flex; gap: 8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span>Cool enough without a heatsink</span></div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 8px">
+            <div style="flex: 1 1 auto; text-align: center; padding: 10px 0; border-radius: 6px; background: #0f6cbd; color: #ffffff; font-size: 14px; font-weight: 600">See price on Amazon</div>
+            <div style="padding: 10px 14px; border-radius: 6px; border: 1px solid rgba(16,19,23,0.12); color: #3b424a; font-size: 14px; font-weight: 600">Details</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid rgba(16,19,23,0.12); border-left: 3px solid #a94a17; border-radius: 8px; overflow: hidden; box-shadow: 0 1.6px 3.6px rgba(0,0,0,0.132), 0 0.3px 0.9px rgba(0,0,0,0.11); display: flex; flex-direction: column">
+        <div style="height: 150px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(16,19,23,0.08)">
+          <svg width="170" height="66" viewBox="0 0 170 66" aria-hidden="true"><rect x="10" y="20" width="150" height="26" rx="3" fill="#101317"></rect><rect x="20" y="27" width="40" height="12" rx="1" fill="#e8956d"></rect><rect x="70" y="27" width="50" height="12" rx="1" fill="#3b424a"></rect><rect x="132" y="25" width="12" height="16" fill="#3b424a"></rect></svg>
+        </div>
+        <div style="padding: 16px 18px 18px 18px; display: flex; flex-direction: column; gap: 7px; flex: 1 1 auto">
+          <div style="display: flex; gap: 6px"><span style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: #ffffff; background: #a94a17; border-radius: 4px; padding: 2px 8px">PC UPGRADES</span><span style="font-size: 11px; font-weight: 600; color: #0f6cbd; background: rgba(15,108,189,0.11); border-radius: 4px; padding: 2px 8px">New — Gen5</span></div>
+          <div style="font-size: 16px; font-weight: 650; line-height: 1.3">Samsung 9100 PRO 2TB — PCIe 5.0 NVMe</div>
+          <div style="font-size: 13px; color: #585f6a">Up to 14,700 MB/s for Gen5 boards.</div>
+          <div style="display: flex; flex-direction: column; gap: 5px; font-size: 13px; color: #3b424a">
+            <div style="display: flex; gap: 8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span>Needs a PCIe 5.0 M.2 slot</span></div>
+            <div style="display: flex; gap: 8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span>Runs hot — use board cooling</span></div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 8px">
+            <div style="flex: 1 1 auto; text-align: center; padding: 10px 0; border-radius: 6px; background: #0f6cbd; color: #ffffff; font-size: 14px; font-weight: 600">See price on Amazon</div>
+            <div style="padding: 10px 14px; border-radius: 6px; border: 1px solid rgba(16,19,23,0.12); color: #3b424a; font-size: 14px; font-weight: 600">Details</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #ffffff; border: 1px solid rgba(16,19,23,0.12); border-left: 3px solid #a94a17; border-radius: 8px; overflow: hidden; box-shadow: 0 1.6px 3.6px rgba(0,0,0,0.132), 0 0.3px 0.9px rgba(0,0,0,0.11); display: flex; flex-direction: column">
+        <div style="height: 150px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(16,19,23,0.08)">
+          <svg width="170" height="70" viewBox="0 0 170 70" aria-hidden="true"><rect x="20" y="14" width="130" height="40" rx="3" fill="#101317"></rect><rect x="28" y="22" width="24" height="24" rx="2" fill="#3b424a"></rect><rect x="58" y="22" width="24" height="24" rx="2" fill="#3b424a"></rect><rect x="88" y="22" width="24" height="24" rx="2" fill="#3b424a"></rect><rect x="118" y="22" width="24" height="24" rx="2" fill="#3b424a"></rect><path d="M20 58h130" stroke="#e8956d" stroke-width="4"></path></svg>
+        </div>
+        <div style="padding: 16px 18px 18px 18px; display: flex; flex-direction: column; gap: 7px; flex: 1 1 auto">
+          <div style="display: flex; gap: 6px"><span style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: #ffffff; background: #a94a17; border-radius: 4px; padding: 2px 8px">PC UPGRADES</span></div>
+          <div style="font-size: 16px; font-weight: 650; line-height: 1.3">Corsair Vengeance 32GB DDR5-6000 CL30</div>
+          <div style="font-size: 13px; color: #585f6a">The DDR5 sweet spot for a new build.</div>
+          <div style="display: flex; flex-direction: column; gap: 5px; font-size: 13px; color: #3b424a">
+            <div style="display: flex; gap: 8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span>Intel XMP 3.0 one-click profile</span></div>
+            <div style="display: flex; gap: 8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f6cbd" stroke-width="2.2" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg><span>Low profile clears air coolers</span></div>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 8px">
+            <div style="flex: 1 1 auto; text-align: center; padding: 10px 0; border-radius: 6px; background: #0f6cbd; color: #ffffff; font-size: 14px; font-weight: 600">See price on Amazon</div>
+            <div style="padding: 10px 14px; border-radius: 6px; border: 1px solid rgba(16,19,23,0.12); color: #3b424a; font-size: 14px; font-weight: 600">Details</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TPM compatibility warning -->
+    <div style="margin-top: 20px; background: #ffffff; border: 1px solid rgba(16,19,23,0.12); border-radius: 8px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 36px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a94a17" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><circle cx="12" cy="16.5" r="0.5" fill="#a94a17"></circle></svg>
+      <div style="font-size: 13px; color: #3b424a; max-width: 980px"><span style="font-weight: 650; color: #101317">Before you buy a TPM module:</span> most CPUs since 2017 already include firmware TPM — enable it in UEFI first. Headers are not standardized: match your exact board's pin count <span style="font-style: italic">and</span> bus (LPC vs SPI), or the module will not fit. The compatibility notes on each module card list the variants.</div>
+    </div>
+
+    <div style="text-align: center; font-size: 12px; color: #585f6a; padding-bottom: 32px">As an Amazon Associate, WindowsForum.com earns from qualifying purchases.</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,107 +1,100 @@
-import React, { useState } from 'react'
-import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react'
+import React, { useCallback, useState } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Modal } from './ui/Modal'
+import { imageUrl } from '../lib/catalog'
+import type { CatalogImage } from '../types/catalog'
 
 interface ImageGalleryProps {
-  images: { src: string; alt: string; caption?: string }[]
+  images: CatalogImage[]
+  productTitle: string
 }
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {
-  const [selectedImage, setSelectedImage] = useState<number | null>(null)
-  const [currentIndex, setCurrentIndex] = useState(0)
+/**
+ * Thumbnail grid + lightbox. The lightbox rides the shared Modal primitive
+ * (dialog role, focus trap, Escape, scroll lock) and adds arrow-key navigation.
+ */
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productTitle }) => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
-  }
+  const step = useCallback((delta: number) => {
+    setOpenIndex(current => {
+      if (current === null) return current
+      return (current + delta + images.length) % images.length
+    })
+  }, [images.length])
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))
-  }
+  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') { event.preventDefault(); step(-1) }
+    if (event.key === 'ArrowRight') { event.preventDefault(); step(1) }
+  }, [step])
+
+  if (!images.length) return null
+
+  const open = openIndex === null ? null : images[openIndex]
 
   return (
     <>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className="relative group cursor-pointer overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow"
-            onClick={() => {
-              setSelectedImage(index)
-              setCurrentIndex(index)
-            }}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {images.map((image, idx) => (
+          <button
+            key={image.src}
+            type="button"
+            onClick={() => setOpenIndex(idx)}
+            className="group relative overflow-hidden rounded-md border border-edge bg-panel-alt focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <img
-              src={image.src}
+              src={imageUrl(image.src)}
               alt={image.alt}
-              className="w-full h-40 object-cover transform group-hover:scale-110 transition-transform duration-300"
+              loading="lazy"
+              className="aspect-[4/3] w-full bg-white object-contain transition-transform duration-150 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
             />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center">
-              <ZoomIn className="text-white opacity-0 group-hover:opacity-100 transition-opacity w-8 h-8" />
-            </div>
             {image.caption && (
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-2">
-                <p className="text-white text-xs">{image.caption}</p>
-              </div>
+              <span className="absolute inset-x-0 bottom-0 bg-black/60 px-2 py-1 text-left text-xs text-white">
+                {image.caption}
+              </span>
             )}
-          </div>
+          </button>
         ))}
       </div>
 
-      {/* Lightbox Modal */}
-      {selectedImage !== null && (
-        <div
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <button
-            onClick={() => setSelectedImage(null)}
-            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10 bg-black/50 rounded-full p-2"
-          >
-            <X className="w-10 h-10" />
-          </button>
-
-          <button
-            onClick={handlePrevious}
-            className="absolute left-4 text-white hover:text-gray-300 transition-colors"
-          >
-            <ChevronLeft className="w-12 h-12" />
-          </button>
-
-          <div
-            className="max-w-4xl max-h-[80vh] relative"
-            onClick={(e) => e.stopPropagation()}
-          >
+      <Modal
+        isOpen={open !== null}
+        onClose={() => setOpenIndex(null)}
+        ariaLabel={`${productTitle} image viewer`}
+        size="xl"
+      >
+        {open && (
+          <div onKeyDown={handleKeyDown}>
             <img
-              src={images[currentIndex].src}
-              alt={images[currentIndex].alt}
-              className="max-w-full max-h-full object-contain"
+              src={imageUrl(open.src)}
+              alt={open.alt}
+              className="mx-auto max-h-[60vh] w-auto rounded-md"
             />
-            {images[currentIndex].caption && (
-              <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-4">
-                <p className="text-white text-center">{images[currentIndex].caption}</p>
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={handleNext}
-            className="absolute right-4 text-white hover:text-gray-300 transition-colors"
-          >
-            <ChevronRight className="w-12 h-12" />
-          </button>
-
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            {images.map((_, index) => (
+            <div className="mt-4 flex items-center justify-between gap-4">
               <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index === currentIndex ? 'bg-white' : 'bg-white/50'
-                }`}
-              />
-            ))}
+                type="button"
+                onClick={() => step(-1)}
+                aria-label="Previous image"
+                className="rounded-md border border-edge p-2 text-ink2 hover:bg-panel-alt focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+              </button>
+              <p className="text-center text-sm text-muted">
+                {open.caption ?? open.alt}
+                <span className="ml-2 tabular-nums">({(openIndex ?? 0) + 1}/{images.length})</span>
+              </p>
+              <button
+                type="button"
+                onClick={() => step(1)}
+                aria-label="Next image"
+                className="rounded-md border border-edge p-2 text-ink2 hover:bg-panel-alt focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <ChevronRight className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </>
   )
 }

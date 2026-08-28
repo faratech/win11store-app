@@ -2,9 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Windows 11 Store - Get Windows 11 Home & Pro</title>
+    <title>WindowsForum Store (dev)</title>
+    <!-- Dev harness only: production serves the app inside the XenForo page
+         (win11store_index template), which supplies the real background.
+         Toggle dark mode in dev with:
+           document.documentElement.setAttribute('data-variation', 'alternate') -->
+    <style>
+      body { margin: 0; background: #eff5f6; }
+      html.dark body { background: #10141b; }
+    </style>
+    <link rel="canonical" href="https://windowsforum.com/store/" />
   </head>
   <body>
     <div id="win11-store-root"></div>
