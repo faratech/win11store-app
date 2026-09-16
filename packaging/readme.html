@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WindowsForum for Windows</title>
+    <style>
+        :root { color-scheme: light dark; font: 16px system-ui, sans-serif; }
+        body { max-width: 52rem; margin: 3rem auto; padding: 0 1.25rem; line-height: 1.55; }
+        code { padding: .12rem .3rem; border-radius: .25rem; background: #8883; }
+        li { margin: .45rem 0; }
+    </style>
+</head>
+<body>
+    <h1>WindowsForum for Windows</h1>
+    <p>This directory contains the WindowsForum Progressive Web App release packages.</p>
+
+    <h2>Install the sideload package</h2>
+    <p>Windows 10 version 19041 or later and Microsoft Edge Stable are required. Keep
+    <code>install.ps1</code>, <code>WindowsForum.sideload.msix</code>, and
+    <code>utils/pwainstaller.exe</code> together, then run Windows PowerShell in this
+    directory:</p>
+    <p><code>Set-ExecutionPolicy -Scope Process Bypass</code><br>
+    <code>.\install.ps1</code></p>
+    <p>Use <code>.\install.ps1 -NoLaunch</code> when testing installation without
+    opening the app. The script installs for the current user and launches the exact
+    registered WindowsForum package.</p>
+
+    <h2>Package choices</h2>
+    <ul>
+        <li><code>WindowsForum.sideload.msix</code> is the package used by the local installer.</li>
+        <li><code>WindowsForum.msixbundle</code> is the modern bundle for Store-style distribution.</li>
+        <li><code>WindowsForum.classic.appxbundle</code> is the legacy classic bundle.</li>
+    </ul>
+    <p>The Store submission uses the two bundle files; the PowerShell helper is not
+    embedded in, or executed by, Store packages.</p>
+
+    <h2>Security and support</h2>
+    <p>Obtain packages from a trusted release and verify the published checksums.
+    Direct sideload releases must also provide trusted signatures; Store packages
+    are signed during Store publishing. Do not run the helper from an untrusted
+    download. Visit
+    <a href="https://windowsforum.com/" rel="noopener">WindowsForum.com</a> for the
+    current site and support.</p>
+</body>
+</html>
