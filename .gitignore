@@ -1,0 +1,20 @@
+node_modules/
+dist/
+*.local
+coverage/
+.env
+.env.*
+!.env.example
+
+# Production catalog and host-specific design exports
+public/catalog.json
+public/images/
+design/
+prod-*.png
+
+# Local deployment tooling
+CLAUDE.md
+build-full.sh
+update-catalog.sh
+update-controller.sh
+purge-store-cache.sh
