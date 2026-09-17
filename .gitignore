@@ -18,3 +18,4 @@ build-full.sh
 update-catalog.sh
 update-controller.sh
 purge-store-cache.sh
+packaging/AGENTS.md
