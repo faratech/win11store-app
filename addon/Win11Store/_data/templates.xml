@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <template title="win11store_index" type="public" version_id="1000100" version_string="1.1.0" addon_id="Win11Store">
+        <![CDATA[<xf:title>{$meta.title}</xf:title>
+<xf:description>{$meta.description}</xf:description>
+<xf:h1 hidden="true" />
+
+<xf:head option="wsThemeBoot">
+    <script>
+    // Resolve dark mode BEFORE first paint (the React ThemeContext applies
+    // `.dark` only after mount — without this, dark-mode visitors see the
+    // light theme flash in). Mirrors src/contexts/ThemeContext.tsx; keep in step.
+    (function () {
+        var d = document.documentElement;
+        try {
+            var mode = null;
+            var cs = (d.getAttribute('data-color-scheme') || '').toLowerCase();
+            if (cs === 'light' || cs === 'dark') mode = cs;
+            if (!mode) {
+                var v = (d.getAttribute('data-variation') || '').toLowerCase();
+                if (v === 'alternate') mode = 'dark';
+                else if (v === 'default') mode = 'light';
+            }
+            if (!mode) {
+                var prefix = d.getAttribute('data-cookie-prefix') || 'xf_';
+                var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + prefix + 'style_variation=([^;]*)'))
+                    || document.cookie.match(/(?:^|;\s*)style_variation=([^;]*)/);
+                if (m) {
+                    var val = decodeURIComponent(m[1]);
+                    if (val === 'alternate') mode = 'dark';
+                    else if (val === 'default') mode = 'light';
+                }
+            }
+            if (!mode) mode = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+            if (mode === 'dark') d.classList.add('dark'); else d.classList.remove('dark');
+            d.style.colorScheme = mode;
+        } catch (e) {}
+    })();
+    </script>
+</xf:head>
+
+<xf:head option="meta">
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="{$meta.canonical}" />
+
+    <meta property="og:title" content="{$meta.title}" />
+    <meta property="og:description" content="{$meta.description}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{$meta.canonical}" />
+    <meta property="og:image" content="{$meta.ogImage}" />
+    <meta property="og:image:alt" content="{$meta.ogImageAlt}" />
+    <meta property="og:site_name" content="WindowsForum" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{$meta.title}" />
+    <meta name="twitter:description" content="{$meta.description}" />
+    <meta name="twitter:image" content="{$meta.ogImage}" />
+
+    <script type="application/ld+json">{$jsonLd|raw}</script>
+</xf:head>
+
+<xf:head option="css">
+    <link rel="stylesheet" href="{{ $assets.css }}" />
+    <style>
+        /* SSR fallback styling — replaced wholesale once the SPA hydrates.
+           Rides XF theme vars so light and dark variations both stay legible. */
+        .ws-ssr {
+            max-width: 1280px;
+            margin: 1.5rem auto 2rem;
+            padding: 0 1rem;
+            color: var(--xf-textColor, #1d1d1d);
+        }
+        .ws-ssr h1 { font-size: 1.6rem; margin: 0.75rem 0; font-weight: 600; }
+        .ws-ssr-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--xf-borderColor, #e5e5e5);
+            font-size: 0.9rem;
+        }
+        .ws-ssr-nav a { color: var(--xf-linkColor, #2c5aa0); text-decoration: none; }
+        .ws-ssr-nav a:hover { text-decoration: underline; }
+        .ws-ssr-nav a[aria-current="page"] { font-weight: 700; }
+        .ws-ssr-list { list-style: none; padding: 0; margin: 1rem 0; }
+        .ws-ssr-list li { padding: 0.55rem 0; border-bottom: 1px solid var(--xf-borderColorLight, #eee); }
+        .ws-ssr-list a { color: var(--xf-linkColor, #2c5aa0); font-weight: 600; }
+        .ws-ssr-meta { color: var(--xf-textColorMuted, #666); font-size: 0.85rem; }
+
+        /* The SPA hero carries the store's own heading and intro; the page
+           description block (the h1 is suppressed via xf:h1 hidden) would
+           duplicate it right above. */
+        .p-body-header { display: none !important; }
+
+        @media (max-width: 1200px) {
+            .p-sideNav { display: none !important; }
+            .p-body-inner { width: 100% !important; padding: 0 10px !important; }
+        }
+    </style>
+</xf:head>
+
+<div id="win11-store-root" class="google-anno-skip" data-section="{$section}">
+    <section class="ws-ssr" aria-label="{$meta.heading}">
+        <nav class="ws-ssr-nav" aria-label="Store categories">
+            <a href="/store/"<xf:if is="$section == ''"> aria-current="page"</xf:if>>All picks</a>
+            <xf:foreach loop="$categories" value="$category">
+                <a href="/store/{$category.slug}/"<xf:if is="$section == $category.slug"> aria-current="page"</xf:if>>{$category.title}</a>
+            </xf:foreach>
+        </nav>
+        <h1>{$meta.heading}</h1>
+        <xf:if is="$sectionProducts is not empty">
+            <ul class="ws-ssr-list">
+                <xf:foreach loop="$sectionProducts" value="$product">
+                    <li>
+                        <a href="https://www.amazon.com/dp/{$product.asin}?tag=windowsfor081-20" rel="sponsored noopener noreferrer">{$product.title}</a>
+                        <div class="ws-ssr-meta">{$product.blurb}</div>
+                    </li>
+                </xf:foreach>
+            </ul>
+        </xf:if>
+        <p class="ws-ssr-meta">As an Amazon Associate, WindowsForum.com earns from qualifying purchases.</p>
+    </section>
+</div>
+
+<script type="application/json" id="store-catalog">{$catalogJson|raw}</script>
+<script type="module" src="{{ $assets.js }}"></script>]]>
+    </template>
+</templates>

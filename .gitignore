@@ -5,6 +5,7 @@ coverage/
 .env
 .env.*
 !.env.example
+!addon/**/*.json
 
 # Production catalog and host-specific design exports
 public/catalog.json

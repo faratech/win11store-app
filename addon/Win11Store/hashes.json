@@ -1,0 +1,6 @@
+{
+    "src/addons/Win11Store/addon.json": "f40ae1fdc93c73072a0e084d83c431a077add47eca21a936201c5ef7d497a546",
+    "src/addons/Win11Store/Pub/Controller/Store.php": "ec0eb85cc1478db7a27523386c245ae2bc5359db7ed855f3d601e3f8f4ea0c9c",
+    "src/addons/Win11Store/_data/routes.xml": "cae6bd4d74da75f5b65ef0afee3706e692f51618fd202ce83dc9d91645abaccb",
+    "src/addons/Win11Store/_data/templates.xml": "c831006cc6b1a40909d5e204672e6e97f95056cdee6b367aa871152824aff611"
+}
