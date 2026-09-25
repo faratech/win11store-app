@@ -50,8 +50,8 @@ class Store extends AbstractController
         // /web/win11store_app/update-controller.sh via sed after every SPA
         // deploy — keep the exact `'css' => '/js/Win11Store/index-BsqyTnAG.css'` shape.
         $assets = [
-            'css' => '/js/Win11Store/index-BsqyTnAG.css',
-            'js' => '/js/Win11Store/index-BbmXfLaA.js'
+            'css' => '/js/Win11Store/index-B7dSQ3Nw.css',
+            'js' => '/js/Win11Store/index-CkoWKazn.js'
         ];
 
         $meta = $this->getSectionMeta($catalog, $section);

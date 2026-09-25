@@ -113,7 +113,7 @@
             <ul class="ws-ssr-list">
                 <xf:foreach loop="$sectionProducts" value="$product">
                     <li>
-                        <a href="https://www.amazon.com/dp/{$product.asin}?tag=windowsfor081-20" rel="sponsored noopener noreferrer">{$product.title}</a>
+                        <a href="https://www.amazon.com/dp/{$product.asin}?tag=windowsforu0d-20" rel="sponsored noopener noreferrer">{$product.title}</a>
                         <div class="ws-ssr-meta">{$product.blurb}</div>
                     </li>
                 </xf:foreach>

@@ -1,4 +1,4 @@
-export const AFFILIATE_TAG = 'windowsfor081-20'
+export const AFFILIATE_TAG = 'windowsforu0d-20'
 
 /** Outbound links are derived from the ASIN at render time so the tag can never drift. */
 export const amazonUrl = (asin: string): string =>
