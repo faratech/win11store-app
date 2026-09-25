@@ -69,6 +69,10 @@ class Store extends AbstractController
         $view->setPageParams([
             'pageTitle'       => $meta['title'],
             'pageDescription' => $meta['description'],
+            // Tells the wf_store_suppress_default_meta PAGE_CONTAINER modification
+            // to skip XF's fallback OG/Twitter block — the store template emits its
+            // own complete set (title, description, OG, Twitter, canonical, JSON-LD).
+            'wsStoreActive'   => true,
         ]);
         return $view;
     }
@@ -115,24 +119,29 @@ class Store extends AbstractController
                 {
                     $og = $this->pickOgImage($catalog, $category);
                     return [
-                        'title'       => $category['pageTitle'] ?? $category['title'],
-                        'heading'     => $category['title'],
-                        'description' => $category['metaDescription'] ?? '',
-                        'canonical'   => $base . $section . '/',
-                        'ogImage'     => $og['url'],
-                        'ogImageAlt'  => $og['alt'],
+                        'title'        => $category['pageTitle'] ?? $category['title'],
+                        'heading'      => $category['title'],
+                        'description'  => $category['metaDescription'] ?? '',
+                        'canonical'    => $base . $section . '/',
+                        'ogImage'      => $og['url'],
+                        'ogImageAlt'   => $og['alt'],
+                        'ogImageWidth' => $og['width'] ?? 0,
+                        'ogImageHeight' => $og['height'] ?? 0,
                     ];
                 }
             }
         }
 
+        $og = $this->describeOgImage(self::ASSET_BASE_URL . 'images/win11-pro-1.jpg', 'WindowsForum Store');
         return [
-            'title'       => 'WindowsForum Store — Curated Windows Hardware & Software',
-            'heading'     => 'WindowsForum Store',
-            'description' => 'Hand-picked Surface hardware, Xbox gear, Windows 11-ready PC upgrades, and genuine Microsoft licenses — curated by the WindowsForum community.',
-            'canonical'   => $base,
-            'ogImage'     => self::ASSET_BASE_URL . 'images/win11-pro-1.jpg',
-            'ogImageAlt'  => 'WindowsForum Store',
+            'title'        => 'WindowsForum Store — Curated Windows Hardware & Software',
+            'heading'      => 'WindowsForum Store',
+            'description'  => 'Hand-picked Surface hardware, Xbox gear, Windows 11-ready PC upgrades, and genuine Microsoft licenses — curated by the WindowsForum community.',
+            'canonical'    => $base,
+            'ogImage'      => $og['url'],
+            'ogImageAlt'   => $og['alt'],
+            'ogImageWidth' => $og['width'] ?? 0,
+            'ogImageHeight' => $og['height'] ?? 0,
         ];
     }
 
@@ -168,17 +177,37 @@ class Store extends AbstractController
             $image = $product['images'][0] ?? null;
             if (!empty($image['src']))
             {
-                return [
-                    'url' => self::ASSET_BASE_URL . ltrim($image['src'], '/'),
-                    'alt' => $image['alt'] ?? ($product['title'] ?? 'WindowsForum Store'),
-                ];
+                return $this->describeOgImage(
+                    self::ASSET_BASE_URL . ltrim($image['src'], '/'),
+                    $image['alt'] ?? ($product['title'] ?? 'WindowsForum Store')
+                );
             }
         }
 
-        return [
-            'url' => self::ASSET_BASE_URL . 'images/win11-pro-1.jpg',
-            'alt' => 'WindowsForum Store',
-        ];
+        return $this->describeOgImage(self::ASSET_BASE_URL . 'images/win11-pro-1.jpg', 'WindowsForum Store');
+    }
+
+    /**
+     * Adds intrinsic dimensions (for og:image:width/height) when the share image
+     * is a local store asset; scrapers that skip the probe rely on them. A
+     * missing/unreadable file simply omits the keys.
+     */
+    protected function describeOgImage(string $url, string $alt): array
+    {
+        $meta = ['url' => $url, 'alt' => $alt];
+
+        $prefix = self::ASSET_BASE_URL;
+        if (substr($url, 0, strlen($prefix)) === $prefix)
+        {
+            $path = \XF::getRootDirectory() . '/js/Win11Store/' . substr($url, strlen($prefix));
+            $info = @getimagesize($path);
+            if ($info)
+            {
+                $meta['width'] = (int) $info[0];
+                $meta['height'] = (int) $info[1];
+            }
+        }
+        return $meta;
     }
 
     /**
