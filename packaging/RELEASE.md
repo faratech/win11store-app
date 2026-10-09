@@ -26,7 +26,13 @@ packages and the sideload installer are separate distribution paths:
    do not require local signatures for this gate. For a separate direct-download
    release, sign `WindowsForum.sideload.msix` and `utils/pwainstaller.exe` with
    the certificate trusted by that distribution channel. Never commit
-   certificates, private keys, or signing exports.
+   certificates, private keys, or signing exports. `verify-release.ps1` pins
+   the identities: every package's publisher must be
+   `CN=ABDB6B3F-DF9E-447D-BC0E-4DA7BAFD14C4`, a signed sideload package's
+   signer subject must equal its manifest publisher, and the helper's primary
+   signer must be CN and O `Fara Technologies LLC` (faratech Trusted Signing).
+   Change `$ExpectedPackagePublisherCN` or `$ExpectedHelperSigner` there if
+   the release identity changes.
 5. Replace the complete matching artifact set. From this directory, regenerate
    `SHA256SUMS` with:
 

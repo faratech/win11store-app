@@ -14,6 +14,21 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
+# A valid, trusted signature is not proof that we signed something, so the
+# identities are pinned and compared as parsed name attributes, exactly.
+#
+# Every package manifest carries the Partner Center publisher of the
+# 32827MikeFara account. Partner Center re-signs Store uploads with a
+# certificate of this subject, and a signed sideload package must be signed
+# by a certificate whose subject equals its manifest publisher.
+$ExpectedPackagePublisherCN = 'ABDB6B3F-DF9E-447D-BC0E-4DA7BAFD14C4'
+# The direct-download helper must carry the primary signature faratech's
+# Trusted Signing account puts on executables (profile Faratech).
+$ExpectedHelperSigner = [ordered]@{
+	CN = 'Fara Technologies LLC'
+	O = 'Fara Technologies LLC'
+}
+
 if ([string]::IsNullOrWhiteSpace($Root))
 {
 	$Root = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -91,17 +106,61 @@ function Get-PackageRecord
 	return $record
 }
 
+function Get-NameAttributes
+{
+	param([System.Security.Cryptography.X509Certificates.X500DistinguishedName]$Name)
+
+	# One "key=value" line per attribute, parsed by the platform rather than
+	# by matching inside the formatted string.
+	$flags = [System.Security.Cryptography.X509Certificates.X500DistinguishedNameFlags]'UseNewLines, DoNotUseQuotes'
+	foreach ($line in ($Name.Decode($flags) -split "\r?\n"))
+	{
+		if ($line -match '^(?<key>[^=]+)=(?<value>.*)$')
+		{
+			[pscustomobject]@{ Key = $Matches.key.Trim(); Value = $Matches.value }
+		}
+		elseif ($line)
+		{
+			throw "Unparseable name attribute: $line"
+		}
+	}
+}
+
+function Get-SingleNameAttribute
+{
+	param(
+		[object[]]$Attributes,
+		[string]$Key
+	)
+
+	$values = @($Attributes | Where-Object { $_.Key -ceq $Key })
+	if ($values.Count -ne 1)
+	{
+		return $null
+	}
+
+	return $values[0].Value
+}
+
 function Get-PublisherCommonName
 {
 	param([string]$Publisher)
 
-	$match = [regex]::Match($Publisher, 'CN=[^,]+')
-	if ($match.Success)
+	$name = [System.Security.Cryptography.X509Certificates.X500DistinguishedName]::new($Publisher)
+	$commonName = Get-SingleNameAttribute -Attributes @(Get-NameAttributes $name) -Key 'CN'
+	if ($null -eq $commonName)
 	{
-		return $match.Value
+		throw "Publisher '$Publisher' does not have exactly one CN."
 	}
 
-	return $Publisher
+	return $commonName
+}
+
+function Get-CanonicalName
+{
+	param([System.Security.Cryptography.X509Certificates.X500DistinguishedName]$Name)
+
+	return $Name.Decode([System.Security.Cryptography.X509Certificates.X500DistinguishedNameFlags]::None)
 }
 
 function Test-ArchiveHasSignature
@@ -226,6 +285,11 @@ if ($publisherNames.Count -ne 1)
 	throw "Package publisher mismatch: $($publisherNames -join ', ')."
 }
 
+if ($publisherNames[0] -cne $ExpectedPackagePublisherCN)
+{
+	throw "Package publisher CN=$($publisherNames[0]) is not the expected CN=$ExpectedPackagePublisherCN."
+}
+
 $modernRecords = @($records | Where-Object { $_.FileName -in @('WindowsForum.sideload.msix', 'WindowsForum.msixbundle') })
 $classicRecord = $records | Where-Object { $_.FileName -eq 'WindowsForum.classic.appxbundle' }
 $modernVersions = @($modernRecords | Select-Object -ExpandProperty Version -Unique)
@@ -277,11 +341,37 @@ if ($RequireSignatures)
 		throw 'signtool verification failed for WindowsForum.sideload.msix.'
 	}
 
+	# Windows installs a signed package only when the signing certificate's
+	# subject equals the manifest publisher, and that publisher's CN is pinned
+	# above; so any other signer, however trusted, fails here.
+	$packageSignature = Get-AuthenticodeSignature -LiteralPath $sideloadRecord.Path
+	if ($packageSignature.Status -ne 'Valid' -or -not $packageSignature.SignerCertificate)
+	{
+		throw "WindowsForum.sideload.msix signature status is $($packageSignature.Status)."
+	}
+
+	$packageSigner = Get-CanonicalName $packageSignature.SignerCertificate.SubjectName
+	$manifestPublisher = Get-CanonicalName ([System.Security.Cryptography.X509Certificates.X500DistinguishedName]::new($sideloadRecord.Publisher))
+	if ($packageSigner -cne $manifestPublisher)
+	{
+		throw "WindowsForum.sideload.msix is signed by '$packageSigner', not its manifest publisher '$manifestPublisher'."
+	}
+
 	$helperPath = Join-Path -Path $Root -ChildPath 'utils\pwainstaller.exe'
 	$helperSignature = Get-AuthenticodeSignature -LiteralPath $helperPath
-	if ($helperSignature.Status -ne 'Valid')
+	if ($helperSignature.Status -ne 'Valid' -or -not $helperSignature.SignerCertificate)
 	{
 		throw "Direct-download helper signature status is $($helperSignature.Status)."
+	}
+
+	$helperSigner = @(Get-NameAttributes $helperSignature.SignerCertificate.SubjectName)
+	foreach ($key in $ExpectedHelperSigner.Keys)
+	{
+		$actual = Get-SingleNameAttribute -Attributes $helperSigner -Key $key
+		if ($actual -cne $ExpectedHelperSigner[$key])
+		{
+			throw "Direct-download helper is signed by '$($helperSignature.SignerCertificate.Subject)', expected $key=$($ExpectedHelperSigner[$key])."
+		}
 	}
 
 	Write-Host 'Direct sideload package and helper signatures verified.'
