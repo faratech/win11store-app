@@ -111,7 +111,15 @@ function Get-NameAttributes
 	param([System.Security.Cryptography.X509Certificates.X500DistinguishedName]$Name)
 
 	# One "key=value" line per attribute, parsed by the platform rather than
-	# by matching inside the formatted string.
+	# by matching inside the formatted string. A line break inside a value
+	# would forge extra attribute lines, so such names are refused outright
+	# (the single-line form only contains one if a value does).
+	$singleLine = $Name.Decode([System.Security.Cryptography.X509Certificates.X500DistinguishedNameFlags]::None)
+	if ($singleLine -match '[\r\n]')
+	{
+		throw 'Name has an attribute value containing a line break.'
+	}
+
 	$flags = [System.Security.Cryptography.X509Certificates.X500DistinguishedNameFlags]'UseNewLines, DoNotUseQuotes'
 	foreach ($line in ($Name.Decode($flags) -split "\r?\n"))
 	{
